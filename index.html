@@ -1,0 +1,235 @@
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+
+
+
+<div class="video-background">
+    <div class="video-foreground">
+      <iframe src="https://www.youtube.com/embed/W0LHTWG-UmQ?controls=0&showinfo=0&rel=0&autoplay=1&loop=1&playlist=W0LHTWG-UmQ" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+
+<div id="vidtop-content">
+<div class="vid-info">
+      <h1>Math Trivia!</h1>
+      <p> Try to answer as many questions as possible</p>
+  
+  
+      <div class="container">
+
+        
+
+        <h2 id="Timer">
+            Time Remaining: 9 Secconds
+            </h2>
+                        
+            
+            <h1 id="Question">
+                Question 1
+            </h1>
+            
+                <div >
+                    <input class="radio" type="radio" name="group1" value="1" id="R1"/> <label for="R1" class="label">Question1</label> <br>
+                    <input class="radio" type="radio" name="group1" value="2" id="R2"/> <label for="R2" class="label">Question2</label> <br>
+                    <input class="radio" type="radio" name="group1" value="3" id="R3"/> <label for="R3" class="label">Question3</label> <br>
+                    <input class="radio" type="radio" name="group1" value="4" id="R4"/> <label for="R4" class="label">Question4</label> <br>
+                </div>
+            
+            
+            
+            <div id="Answers">
+
+                <h2 id="correct"> Correct: </h2>
+                <h2 id="incorrect"> Incorrect: </h2>
+                <h2 id="unanswered"> Unanswered: </h2>
+
+
+
+            </div>
+            
+
+
+          </div>
+  
+  
+  
+  
+  
+  
+  
+  
+    </div>
+</div>
+
+
+</body>
+
+
+
+</html>
+
+
+
+<script>
+
+
+var intervalId
+var number=9
+var correct=0
+var incorrect=0
+var unanswered=0
+var gameend=0
+
+    function run() {
+      clearInterval(intervalId);
+      number=9
+      intervalId = setInterval(decrement, 1000);
+      update_screen(i)
+    
+    }
+    
+    function decrement() {
+      
+      if (gameend===1) { return 0}
+          number--;
+      $("#Timer").html("<h2> Time Remaining:" + number + " Seconds</h2>");
+      if (number === 0) {
+        stop();
+        unanswered++
+        $("#unanswered").html("Unanswered:"+unanswered)
+        number=9
+      }
+    }
+
+    
+    function stop() {
+      clearInterval(intervalId);
+      i++ 
+
+      if (i<QNA.Questions.length){
+      run(i)
+      }
+
+      if (i>=QNA.Questions.length){
+      //alert("Game End");
+      $("#Question").detach()
+      $('.radio').detach()
+      $('.label').detach()
+      $('#Timer').text("Results:")
+      gameend=1
+
+    }
+
+    }
+
+
+// This is an array with all the questions and answers, work on placing all functions into objects
+QNA = {
+
+Questions : ["3+3?","4+4?","5+5?","5*5?","7+67-89*2-14?","(2*7-9*23-88+370)/5?","7+9+67+88-23?","56+55+88+99/3?","9-2-3+8+7+9+1+2+7+5?"],
+Answer1: [6,8,10,25,-117,17.7,148,231,43],
+Answer2: [7,5,15,10,-118,17.6,147,232,44],
+Answer3: [9,10,20,20,-98,17.9,146,230,45],
+Answer4: [11,12,25,30,-99,17.8,145,229,46],
+CorrectAnswer: ["1","1","1","1","2","4","1","2","1"]
+}
+
+
+var i=0
+
+    run(i);
+
+function update_screen(i){
+$("#Question").text(QNA.Questions[i])
+$('label[for=R1]').html(QNA.Answer1[i])
+$('label[for=R2]').html(QNA.Answer2[i])
+$('label[for=R3]').html(QNA.Answer3[i])
+$('label[for=R4]').html(QNA.Answer4[i])
+
+}
+
+
+// this triggers when any of the radio buttons is clicked.
+$("input[name='group1']").click(function(){
+
+var selected= $('input[name=group1]:checked').val()
+
+    if(selected === QNA.CorrectAnswer[i]){
+        correct++
+        $("#correct").html("Correct:"+correct)
+        $('.radio').prop('checked', false);
+        stop()
+        run(i+1)
+    } else {
+        alert("correct answer was number " +  QNA.CorrectAnswer[i])
+        incorrect++
+        $("#incorrect").html("Incorrect:"+incorrect)
+        $('.radio').prop('checked', false);
+        stop()
+        run(i+1)
+    }   
+})
+
+
+
+
+</script>
+
+
+<style>
+
+
+
+    * { box-sizing: border-box; }
+    .video-background {
+      background: #000;
+      position: fixed;
+      top: 0; right: 0; bottom: 0; left: 0;
+      z-index: -99;
+    }
+    .video-foreground,
+    .video-background iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    #vidtop-content {
+        top: 0;
+        color: #fff;
+    }
+    .vid-info { position: absolute; top: 0; right: 0; width: 33%; background: rgba(0,0,0,0.3); color: #fff; padding: 1rem; font-family: Avenir, Helvetica, sans-serif; }
+    .vid-info h1 { font-size: 2rem; font-weight: 700; margin-top: 0; line-height: 1.2; }
+    .vid-info a { display: block; color: #fff; text-decoration: none; background: rgba(0,0,0,0.5); transition: .6s background; border-bottom: none; margin: 1rem auto; text-align: center; }
+    @media (min-aspect-ratio: 16/9) {
+      .video-foreground { height: 300%; top: -100%; }
+    }
+    @media (max-aspect-ratio: 16/9) {
+      .video-foreground { width: 300%; left: -100%; }
+    }
+    @media all and (max-width: 600px) {
+    .vid-info { width: 50%; padding: .5rem; }
+    .vid-info h1 { margin-bottom: .2rem; }
+    }
+    @media all and (max-width: 500px) {
+    .vid-info .acronym { display: none; }
+    }
+    </style>
+    
+    
+    
+    
+    
+
